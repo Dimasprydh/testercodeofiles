@@ -1,0 +1,130 @@
+
+<footer class="o-footer" role="contentinfo">
+  <div class="o-footer__inner">
+    <!-- TOP NAV -->
+    <nav class="o-footer__nav" aria-label="Footer navigation">
+      <a href="/pages/general-information">GENERAL INFORMATION</a>
+      <a href="/pages/about-us">ABOUT US</a>
+      <a href="/pages/contact">CONTACT US</a>
+      <button class="o-footer__nl-btn" id="oFooterNlBtn" type="button" aria-expanded="false" aria-controls="oFooterNl">NEWSLETTER</button>
+      <a href="/pages/stockists-and-press">STOCKISTS AND PRESS</a>
+      <a href="https://instagram.com" target="_blank" rel="noopener">INSTAGRAM</a>
+    </nav>
+
+    <div class="o-footer__nl" id="oFooterNl" hidden>
+      {%- form 'customer', id: 'FooterNewsletterForm' -%}
+        {{ form.errors | default_errors }}
+        {% if form.posted_successfully? %}
+          <p class="o-footer__nl-msg">Thank you — please check your inbox.</p>
+        {% endif %}
+        <div class="o-footer__nl-fields">
+          <label class="visually-hidden" for="oFooterEmail">Email address</label>
+          <input id="oFooterEmail" type="email" name="contact[email]" placeholder="Your email" required autocapitalize="off" autocomplete="email">
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <button type="submit">Subscribe</button>
+        </div>
+      {%- endform -%}
+    </div>
+
+    <!-- BOTTOM LINE -->
+    <div class="o-footer__bottom">
+      <span>O. FILES © 2025 COPENHAGEN</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  html, body{ margin:0 !important; padding:0 !important; }
+
+  #MainContent, .content-for-layout, .page-width, .shopify-section{
+    margin:0 !important; padding:0 !important;
+  }
+
+  .o-footer{
+    background:#0f0f10; color:#fff; border-top:1px solid rgba(255,255,255,.08);
+
+    position:relative; width:100vw;
+    left:50%; right:50%; margin-left:-50vw; margin-right:-50vw;
+  }
+
+  .o-footer__inner{
+    max-width:1200px; margin:0 auto;
+    padding:36px 20px 22px;
+  }
+
+  /* TOP NAV */
+  .o-footer__nav{
+    display:flex; flex-wrap:wrap; gap:18px 28px;
+    justify-content:center; align-items:center; text-align:center;
+  }
+  .o-footer__nav a, .o-footer__nl-btn{
+    font-family:sans-serif; font-weight:600; font-size:12px;
+    letter-spacing:.12em; text-transform:uppercase;
+    color:#fff; text-decoration:none; opacity:.9; transition:opacity .25s ease;
+    background:none; border:0; cursor:pointer; padding:6px 0;
+  }
+  .o-footer__nav a:hover, .o-footer__nl-btn:hover{ opacity:.65; }
+
+  .o-footer__nl{
+    overflow:hidden; max-height:0; opacity:0;
+    transition:max-height .45s ease, opacity .35s ease, margin .35s ease;
+    margin-top:0;
+  }
+  .o-footer__nl[data-open="true"]{ max-height:220px; opacity:1; margin-top:14px; }
+  .o-footer__nl-fields{
+    display:flex; gap:10px; justify-content:center; align-items:center; flex-wrap:wrap;
+  }
+  .o-footer__nl input[type="email"]{
+    width:min(380px, 90vw); background:transparent; color:#fff;
+    border:1px solid rgba(255,255,255,.22); padding:10px 12px; border-radius:999px;
+    font:500 13px/1.2 sans-serif; outline:none;
+  }
+  .o-footer__nl input[type="email"]::placeholder{ color:rgba(255,255,255,.55); }
+  .o-footer__nl button[type="submit"]{
+    background:transparent; color:#fff; border:1px solid rgba(255,255,255,.35);
+    padding:10px 16px; border-radius:999px;
+    font:700 11px/1 sans-serif; letter-spacing:.14em; text-transform:uppercase;
+    cursor:pointer; transition:opacity .25s ease, border-color .25s ease;
+  }
+  .o-footer__nl button[type="submit"]:hover{ opacity:.8; border-color:rgba(255,255,255,.55); }
+  .o-footer__nl-msg{ text-align:center; margin:8px 0 0; font:600 12px/1.5 sans-serif; letter-spacing:.06em; }
+
+  /* BOTTOM */
+  .o-footer__bottom{
+    margin-top:20px; padding-top:14px;
+    border-top:1px dashed rgba(255,255,255,.08);
+    text-align:center; font:600 11px/1.8 sans-serif;
+    letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.7);
+  }
+
+  .visually-hidden{
+    position:absolute !important; width:1px; height:1px; margin:-1px;
+    border:0; padding:0; clip:rect(0 0 0 0); clip-path:inset(50%); overflow:hidden; white-space:nowrap;
+  }
+
+  @media (max-width:640px){
+    .o-footer__inner{ padding:28px 16px 18px; }
+    .o-footer__nav{ gap:14px 20px; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .o-footer__nl, .o-footer__nav a, .o-footer__nl-btn{ transition:none !important; }
+  }
+</style>
+
+<script>
+  (function(){
+    var btn = document.getElementById('oFooterNlBtn');
+    var panel = document.getElementById('oFooterNl');
+    if(!btn || !panel) return;
+    btn.addEventListener('click', function(){
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      if(open){
+        panel.removeAttribute('data-open'); panel.setAttribute('hidden','');
+      }else{
+        panel.setAttribute('data-open','true'); panel.removeAttribute('hidden');
+        setTimeout(function(){ var inp=document.getElementById('oFooterEmail'); inp && inp.focus(); },120);
+      }
+    });
+  })();
+</script>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O.FILES</title>
+    {{ content_for_header }}
+    <link rel="stylesheet" href="{{ 'style.css' | asset_url }}">
+    {% comment %} <link rel="icon" href="{{ 'logo2.png' | asset_url }}"  type="image/jpeg" /> {% endcomment %}
+    <script src="{{ 'script.js' | asset_url }}"></script>
+
+<meta name="google-site-verification" content="uctDL5SkAqNIC-D2SsMsEY7TDviBwsHmj2x4IAn-EA4">
+    <!-- Open Graph Meta Tags -->
+{% comment %} <meta property="og:title" content="MEDIOCRE">
+<meta property="og:description" content="A collection celebrating effortless style, individuality, and the beauty of simplicity.">
+<meta property="og:image" content="https://cdn.shopify.com/s/files/1/0758/5395/5297/files/mediocre_logo.png?v=1747391317">
+<meta property="og:image:secure_url" content="https://cdn.shopify.com/s/files/1/0758/5395/5297/files/mediocre_logo.png?v=1747391317">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="628">
+<meta property="og:url" content="https://mediocreq.com/">
+<meta property="og:type" content="website"> {% endcomment %}
+
+<!-- Twitter Card Meta Tags -->
+{% comment %} <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MEDIOCRE">
+<meta name="twitter:description" content="A collection celebrating effortless style, individuality, and the beauty of simplicity.">
+<meta name="twitter:image" content="https://cdn.shopify.com/s/files/1/0758/5395/5297/files/mediocre_logo.png?v=1747391317"> {% endcomment %}
+
+  </head>
+  <body>
+  {% section 'loader' %}
+
+  <header>
+    {% section 'header' %}
+  </header>
+
+  <main>
+    {{ content_for_layout }}
+  </main>
+
+  {% unless request.page_type == 'index' %}
+    <footer>
+      {% section 'footer' %}
+    </footer>
+  {% endunless %}
+
+  {{ content_for_footer }}
+</body>
+
+
+</html>

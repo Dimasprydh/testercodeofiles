@@ -1,0 +1,117 @@
+<div class="preloader" id="preloader" role="status" aria-hidden="false" aria-busy="true">
+  <div class="preloader__inner">
+    <div class="brand" data-text="O.FILES" aria-label="O.FILES">O.FILES</div>
+  </div>
+</div>
+
+<style>
+  .preloader{
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100dvh;
+    background:#FFFFF9;
+    display:grid;
+    place-items:center;
+    z-index:2147483647;
+    transition:opacity .5s ease, visibility .5s ease;
+    pointer-events:auto;
+    user-select:none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .preloader__inner{ display:grid; justify-items:center; padding:24px; }
+
+  
+  .preloader.is-hidden{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+
+  
+  .brand{
+    position:relative;
+    font-family:sans-serif;
+    font-weight:700;
+    font-size:clamp(28px,6vw,72px);
+    letter-spacing:.1em;
+    line-height:1;
+    color:#7a7a7a;
+  }
+  .brand::after{
+    content: attr(data-text);
+    position:absolute; inset:0;
+    color:#333;
+    clip-path: inset(100% 0 0 0);
+    animation: revealUp 2.4s ease forwards;
+  }
+  @keyframes revealUp{
+    from { clip-path: inset(100% 0 0 0); }
+    to   { clip-path: inset(0% 0 0 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .brand::after{ animation:none; clip-path: inset(0 0 0 0); }
+    .preloader{ transition:none; }
+  }
+
+
+  html.is-loading{ overflow:hidden; }
+</style>
+
+<script>
+  (function(){
+    var pre = document.getElementById('preloader');
+
+
+    document.documentElement.classList.add('is-loading');
+
+    function hidePreloader(){
+      if(!pre || pre.classList.contains('is-hidden')) return;
+      pre.classList.add('is-hidden');
+      pre.setAttribute('aria-hidden', 'true');
+      pre.setAttribute('aria-busy', 'false');
+      document.documentElement.classList.remove('is-loading');
+
+      
+      var removeAfter = function(){
+        pre.style.display = 'none';
+        pre.removeEventListener('transitionend', removeAfter);
+      };
+      pre.addEventListener('transitionend', removeAfter);
+      
+      setTimeout(removeAfter, 700);
+    }
+
+   
+    window.addEventListener('load', function(){
+      setTimeout(hidePreloader, 2800); 
+    });
+
+    // Fallback mutlak
+    setTimeout(hidePreloader, 6000);
+
+    
+    var blockTouch = function(e){
+      if(!pre || pre.classList.contains('is-hidden')) return;
+      e.preventDefault();
+    };
+    document.addEventListener('touchmove', blockTouch, {passive:false});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Loader",
+  "tag": "section",
+  "class": "section-loader",
+  "settings": [
+    { "type": "checkbox", "id": "homepage_only", "label": "Tampilkan hanya di homepage", "default": false }
+  ],
+  "presets": [{ "name": "Loader" }]
+}
+{% endschema %}
+
+{% if section.settings.homepage_only and request.page_type != 'index' %}
+  <script>(function(){var pre=document.getElementById('preloader'); if(pre){pre.style.display='none'; document.documentElement.classList.remove('is-loading');}})();</script>
+{% endif %}

@@ -1,0 +1,239 @@
+<div class="custom-product-grid">
+  {% assign products_sorted = collections.all.products | sort: 'created_at' | reverse %}
+  {% for product in products_sorted %}
+    <div class="product-card">
+      <a href="{{ product.url }}">
+        <div class="product-image-container">
+          <img src="{{ product.featured_image | img_url: '600x600' }}" alt="{{ product.title }}">
+        </div>
+        <div class="product-info">
+          <div class="product-title-price">
+            <h3>{{ product.title }}</h3>
+            <p class="product-price desktop-price">
+              {{ product.price | money_without_trailing_zeros | replace: ',', '.' | split: '.' | first }}.00 IDR
+            </p>
+          </div>
+
+          <!-- DESKTOP STOCK STATUS -->
+          <div class="desktop-stock-status">
+            {% if product.available == false %}
+              <p class="stock-status out-of-stock">Out of stock</p>
+            {% else %}
+              {% assign total_inventory = 0 %}
+              {% for variant in product.variants %}
+                {% assign total_inventory = total_inventory | plus: variant.inventory_quantity %}
+              {% endfor %}
+              {% if total_inventory <= 7 %}
+                <p class="stock-status low-stock">Low stock</p>
+              {% endif %}
+            {% endif %}
+          </div>
+
+          <!-- MOBILE PRICE + STOCK STATUS -->
+          <div class="mobile-info-line">
+            <p class="product-price mobile-price">
+              {{ product.price | money_without_trailing_zeros | replace: ',', '.' | split: '.' | first }}.00 IDR
+            </p>
+            {% if product.available == false %}
+              <p class="stock-status out-of-stock">Out of stock</p>
+            {% elsif total_inventory <= 7 %}
+              <p class="stock-status low-stock">Low stock</p>
+            {% endif %}
+          </div>
+        </div>
+      </a>
+    </div>
+  {% endfor %}
+</div>
+
+<style>
+.custom-product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 40px;
+}
+
+.product-card {
+  padding: 15px;
+  background-color: #fff;
+  transition: transform 0.3s ease;
+}
+
+.product-card a {
+  text-decoration: none;
+}
+
+.product-image-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eaeaea;
+  transition: border-color 0.3s ease; /* Smooth transition */
+}
+
+.product-image-container:hover {
+  border-bottom: 1px solid #333;
+}
+
+
+.product-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.product-title-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-title-price h3 {
+  font-size: 12px;
+  margin: 0;
+  color: #333;
+  flex: 1;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+.product-title-price .product-price {
+  font-size: 11px;
+  color: #888;
+  margin-left: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 300;
+}
+
+.stock-status {
+  font-size: 12px;
+  margin-top: 4px;
+  white-space: nowrap;
+}
+
+.out-of-stock {
+  color: grey;
+}
+
+.low-stock {
+  color: red;
+}
+
+/* DESKTOP stock status */
+.desktop-stock-status {
+  display: block;
+}
+
+/* MOBILE: price + stock inline */
+.mobile-info-line {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.product-price.mobile-price {
+  font-size: 10px;
+  color: #888;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 300;
+  flex: 1;
+}
+
+.mobile-info-line .stock-status {
+  margin: 0;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* RESPONSIVE */
+@media screen and (max-width: 768px) {
+  .custom-product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 10px;
+  }
+
+  .product-title-price .desktop-price {
+    display: none;
+  }
+
+  .mobile-info-line {
+    display: flex;
+  }
+
+  .desktop-stock-status {
+    display: none;
+  }
+
+  .stock-status {
+    font-size: 10px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .custom-product-grid {
+  gap: 10px;
+}
+  
+  .product-title-price h3 {
+    font-size: 10px;
+  }
+
+  .product-price.mobile-price {
+    font-size: 9.5px;
+  }
+
+  .stock-status {
+    font-size: 9.5px;
+  }
+  
+}
+
+@media screen and (max-width: 480px) {
+  .product-title-price h3 {
+    font-size: 9.5px;
+  }
+
+  .product-price.mobile-price {
+    font-size: 9px;
+  }
+
+  .stock-status {
+    font-size: 9px;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .product-title-price h3 {
+    font-size: 9px;
+  }
+
+  .product-price.mobile-price {
+    font-size: 8.5px;
+  }
+
+  .stock-status {
+    font-size: 8.5px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .product-title-price h3 {
+    font-size: 8.5px;
+  }
+
+  .product-price.mobile-price {
+    font-size: 8px;
+  }
+
+  .stock-status {
+    font-size: 8px;
+  }
+}
+</style>

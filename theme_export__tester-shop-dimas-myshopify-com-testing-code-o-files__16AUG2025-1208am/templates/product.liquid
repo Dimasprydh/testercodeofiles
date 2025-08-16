@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{{ product.title }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+ <style>
+  @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
+
+  body {
+    font-family: "Roboto Mono", monospace;
+  }
+
+  .selected-thumb {
+    border: 2px solid black !important;
+    border-right: 4px solid black !important;
+  }
+
+  img,
+  img:focus,
+  img:active {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  #mainImage {
+    border: none !important;
+  }
+
+  /* Sembunyikan slider mobile di atas 990px */
+  @media (min-width: 990px) {
+    #mobile-product-slider {
+      display: none !important;
+    }
+    #thumbnails {
+      display: flex !important;
+    }
+  }
+
+  /* Sembunyikan thumbnails desktop di bawah 990px */
+  @media (max-width: 989px) {
+    #mobile-product-slider {
+      display: flex !important;
+    }
+    #thumbnails {
+      display: none !important;
+    }
+  }
+
+  /* RESPONSIVE 768px - 989px - Atur main image agar tidak ketutup, tampil lebih baik */
+  @media (min-width: 768px) and (max-width: 989px) {
+    #mobile-product-slider {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-top: -100px;
+    }
+
+    #mainImage-slider {
+      max-width: 100%;
+      max-height: auto;
+      object-fit: contain;
+      margin: 0 auto;
+      margin-right: 10px;
+    }
+    
+  .product-details {
+    width: 100%;
+    max-width: 360px !important; /* kurangi dari 450px */
+    margin-left: 10px;
+    margin-right: 1rem;
+    margin-top: -150px;
+  }
+
+  .product-details .border {
+    border-right-width: 3px !important;
+  }
+}
+
+   @media (min-width: 991px) and (max-width: 1280px){
+    #thumbnails {
+      margin-top: -220px ;
+      margin-left: 1rem;
+    }
+      #main-image {
+     margin-top: -220px ;
+    }
+    
+  .product-details {
+    margin-top: -190px;
+    margin-right: 1rem;
+  }
+
+   }
+
+      @media (min-width: 1281px) and (max-width: 1490px){
+    #thumbnails {
+      margin-top: -150px ;
+      margin-left: 1rem;
+    }
+      #main-image {
+     margin-top: -190px ;
+    }
+    
+  .product-details {
+    margin-top: -150px;
+    margin-right: 1rem;
+  }
+
+   }
+
+</style>
+
+</head>
+<body class="bg-white">
+
+<!-- Main wrapper -->
+<div class="max-w-[1500px] mx-auto flex flex-col md:flex-row justify-center items-start px-4 md:px-0 pt-4 pb-8 mt-[250px]">
+
+<!-- Desktop Thumbnails -->
+<div class="flex-col space-y-4 mr-8" id="thumbnails">
+  {% for image in product.images %}
+    <img 
+      src="{{ image | img_url: 'original' }}" 
+      data-full="{{ image | img_url: 'original' }}"
+      alt="{{ image.alt | escape }}" 
+      class="w-[100px] h-[100px] object-cover cursor-pointer p-[2px] 
+             {% if forloop.first %} selected-thumb border border-gray-300 {% else %} border border-transparent {% endif %} rounded shadow-sm hover:opacity-80 transition"
+      loading="lazy"
+    />
+  {% endfor %}
+</div>
+
+<!-- Mobile Slider -->
+<div id="mobile-product-slider" class="w-full overflow-x-auto snap-x snap-mandatory flex space-x-2 mb-4 mt-[-250px] px-2 custom-scrollbar">
+  {% for image in product.images %}
+    <div id="mainImage-slider" class="snap-center flex-shrink-0 w-[90vw] max-h-[80vh] bg-white rounded-md overflow-hidden flex items-center justify-center">
+      <img 
+        src="{{ image | img_url: 'original' }}" 
+        alt="{{ image.alt | escape }}" 
+        class="w-auto max-w-full max-h-full object-cover"
+        loading="eager"
+      />
+    </div>
+  {% endfor %}
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const slider = document.getElementById("mobile-product-slider");
+
+    // Fungsi: tunggu semua gambar dalam slider selesai load
+    function waitForImagesToLoad(container, callback) {
+      const images = container.querySelectorAll("img");
+      let loadedCount = 0;
+
+      if (images.length === 0) return callback();
+
+      images.forEach((img) => {
+        if (img.complete) {
+          loadedCount++;
+          if (loadedCount === images.length) callback();
+        } else {
+          img.addEventListener("load", () => {
+            loadedCount++;
+            if (loadedCount === images.length) callback();
+          });
+          img.addEventListener("error", () => {
+            loadedCount++;
+            if (loadedCount === images.length) callback();
+          });
+        }
+      });
+    }
+
+    // Scroll ke awal setelah gambar selesai dimuat
+    waitForImagesToLoad(slider, () => {
+      slider.scrollLeft = 0;
+    });
+  });
+</script>
+
+
+
+<!-- Main product image (desktop only) -->
+<div id="main-image" class="hidden md:flex justify-center items-start flex-1 max-w-[1000px] mt-[-100px]">
+  <img 
+    id="mainImage"
+    src="{{ product.featured_image | img_url: 'original' }}" 
+    alt="{{ product.title | escape }}" 
+    class="max-w-full max-h-[800px] rounded shadow-lg object-contain"
+  />
+</div>
+
+
+<!-- Product details -->
+<div class="product-details border border-black w-full max-w-[450px] mt-4 md:mt-0 sm:mx-auto md:ml-8 flex flex-col" style="border-right-width: 4px;">
+  <div class="border-b border-black p-4 text-center">
+    <p class="text-xs uppercase font-semibold tracking-widest">{{ product.title }}</p>
+    <p class="text-xs mt-2">
+      {{ product.price | money_without_trailing_zeros | replace: ',', '.' | split: '.' | first }}.00 IDR
+    </p>
+  </div>
+
+ {% if product.variants.size > 0 %}
+  <div class="border-b border-black p-4 text-center">
+    <p class="text-xs uppercase font-semibold tracking-widest mb-4">{{ product.options[0].name }}</p>
+
+    <div id="variant-buttons" class="flex justify-center flex-wrap gap-3 text-xs">
+      {% for variant in product.variants %}
+        <button
+          type="button"
+          class="variant-button px-3 py-1 border text-xs transition duration-200 
+          {% if variant.available %}
+            border-gray-300 hover:border-black cursor-pointer
+          {% else %}
+            border-gray-200 text-gray-400 line-through cursor-not-allowed
+          {% endif %}"
+          {% unless variant.available %}disabled{% endunless %}
+          data-id="{{ variant.id }}"
+        >
+          {{ variant.title }}
+        </button>
+      {% endfor %}
+    </div>
+
+    <p class="text-xs mt-2 underline cursor-pointer" id="openSizeGuide">
+      Size Guide
+    </p>
+  </div>
+
+  <!-- Overlay with Blur -->
+  <div id="sizeGuideOverlay" class="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-[9998] hidden transition-opacity duration-300"></div>
+
+  <!-- Sidebar Size Guide -->
+  <div id="sizeGuideSidebar" class="fixed top-0 right-0 w-full sm:w-[600px] h-full bg-white border-l-[3px] border-black shadow-lg z-[9999] translate-x-full transition-transform duration-300">
+    <div class="flex justify-between items-center border-b border-black p-4">
+      <p class="text-sm font-semibold">Size Guide</p>
+      <button id="closeSizeGuide" class="text-xl font-bold leading-none">&times;</button>
+    </div>
+    <div class="p-4">
+      {% if product.metafields.custom.size_guide_image %}
+        <img 
+          src="{{ product.metafields.custom.size_guide_image | image_url }}" 
+          alt="Size Guide" 
+          class="w-full h-auto"
+        />
+      {% else %}
+        <p class="text-xs text-gray-500">No size guide uploaded.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const openBtn = document.getElementById("openSizeGuide");
+      const closeBtn = document.getElementById("closeSizeGuide");
+      const sidebar = document.getElementById("sizeGuideSidebar");
+      const overlay = document.getElementById("sizeGuideOverlay");
+
+      function openSidebar() {
+        sidebar.classList.remove("translate-x-full");
+        overlay.classList.remove("hidden");
+      }
+
+      function closeSidebar() {
+        sidebar.classList.add("translate-x-full");
+        overlay.classList.add("hidden");
+      }
+
+      if (openBtn) openBtn.addEventListener("click", openSidebar);
+      if (closeBtn) closeBtn.addEventListener("click", closeSidebar);
+      if (overlay) overlay.addEventListener("click", closeSidebar);
+    });
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const buttons = document.querySelectorAll(".variant-button");
+      const input = document.getElementById("variant-id");
+
+      buttons.forEach(button => {
+        button.addEventListener("click", () => {
+          if (button.hasAttribute("disabled")) return;
+
+          // Reset all buttons
+          buttons.forEach(b => {
+            b.classList.remove("border-black", "border-r-4", "bg-gray-100", "font-semibold");
+            b.classList.add("border-gray-300");
+          });
+
+          // Set active style
+          button.classList.remove("border-gray-300");
+          button.classList.add("border-black", "border-r-4", "bg-gray-100", "font-semibold");
+
+          // Update hidden input
+          input.value = button.dataset.id;
+        });
+      });
+
+      // Auto select first available
+      const firstAvailable = Array.from(buttons).find(btn => !btn.hasAttribute("disabled"));
+      if (firstAvailable) {
+        firstAvailable.click();
+      }
+    });
+  </script>
+  {% endif %}
+
+  <form method="post" action="/cart/add">
+    <input type="hidden" name="id" id="variant-id" value="{{ product.variants.first.id }}">
+    <button type="submit" class="bg-black text-white text-xs font-semibold py-2 px-4 w-full hover:bg-[#424242]">
+      Add to Cart
+    </button>
+  </form>
+
+  <div class="border-t border-black p-4 text-xs whitespace-pre-line font-mono">
+    {{ product.description }}
+  </div>
+
+  <!-- Accordion -->
+  <div class="border-t border-black">
+    <div class="p-4 flex justify-between items-center text-xs cursor-pointer select-none accordion-header" data-target="infoContent">
+      <span>Information</span>
+      <span class="toggle-icon">+</span>
+    </div>
+    <div id="infoContent" class="accordion-content-wrapper max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+      <div class="accordion-content-inner border-t border-black text-xs whitespace-pre-line font-mono px-4 py-4">
+        {{ product.metafields.custom.information }}
+      </div>
+    </div>
+
+    <div class="border-t border-black"></div>
+    <div class="p-4 flex justify-between items-center text-xs cursor-pointer select-none accordion-header" data-target="shippingContent">
+      <span>Shipping</span>
+      <span class="toggle-icon">+</span>
+    </div>
+    <div id="shippingContent" class="accordion-content-wrapper max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
+      <div class="accordion-content-inner border-t border-black text-xs whitespace-pre-line font-mono px-4 py-4">
+        {{ product.metafields.custom.shipping }}
+      </div>
+    </div>
+  </div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const targetId = header.dataset.target;
+        const wrapper = document.getElementById(targetId);
+        const content = wrapper.querySelector('.accordion-content-inner');
+        const icon = header.querySelector('.toggle-icon');
+
+        const isOpen = wrapper.classList.contains('open');
+
+        // Tutup semua jika ingin hanya satu yang terbuka
+        document.querySelectorAll('.accordion-content-wrapper').forEach(wrap => {
+          wrap.classList.remove('open');
+          wrap.style.maxHeight = '0px';
+        });
+
+        document.querySelectorAll('.toggle-icon').forEach(i => i.textContent = '+');
+
+        // Buka jika belum terbuka
+        if (!isOpen) {
+          wrapper.classList.add('open');
+          wrapper.style.maxHeight = content.scrollHeight + 'px';
+          icon.textContent = '−';
+        }
+      });
+    });
+  });
+</script>
+
+
+</div>
+
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const mainImage = document.getElementById("mainImage");
+    const thumbnails = document.querySelectorAll("#thumbnails img");
+
+    thumbnails.forEach((thumb) => {
+      thumb.addEventListener("click", function () {
+        const fullImage = this.getAttribute("data-full");
+        mainImage.src = fullImage;
+
+        thumbnails.forEach((img) => {
+          img.classList.remove("selected-thumb");
+          img.classList.add("border-0");
+        });
+
+        this.classList.remove("border-0");
+        this.classList.add("selected-thumb");
+      });
+    });
+  });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
+  const variantInput = document.getElementById("variant-id");
+  const addToCartForm = document.querySelector('form[action="/cart/add"]');
+  const addToCartButton = addToCartForm.querySelector('button[type="submit"]');
+
+  // ❗ Prevent klik saat data belum dimuat
+  addToCartButton.disabled = true;
+  addToCartButton.textContent = "Checking stock";
+  addToCartButton.classList.add("opacity-50", "cursor-wait");
+
+  // Ambil cart data
+  const cart = await fetch('/cart.js')
+    .then(res => res.json())
+    .catch(() => null);
+
+  if (!cart) {
+    addToCartButton.disabled = true;
+    addToCartButton.textContent = "Error";
+    return;
+  }
+
+  // Ambil stok semua variant
+  const variantStocks = {
+    {% for variant in product.variants %}
+      "{{ variant.id }}": {{ variant.inventory_quantity }}{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  };
+
+  function getCartQuantity(variantId) {
+    const cartItem = cart.items.find(item => item.variant_id == variantId);
+    return cartItem ? cartItem.quantity : 0;
+  }
+
+  function getAvailableStock(variantId) {
+    const stock = variantStocks[variantId];
+    const inCart = getCartQuantity(variantId);
+    return stock - inCart;
+  }
+
+  function areAllVariantsUnavailable() {
+    return Object.keys(variantStocks).every(variantId => getAvailableStock(variantId) <= 0);
+  }
+
+  function updateCartValidation() {
+    const selectedVariantId = variantInput.value;
+    const cartQty = getCartQuantity(selectedVariantId);
+    const availableStock = getAvailableStock(selectedVariantId);
+
+    // RESET button state
+    addToCartButton.classList.remove("cursor-wait");
+
+    // 1. Jika variant sudah masuk ke cart dan sisa 0
+    if (availableStock <= 0 && cartQty > 0) {
+      addToCartButton.disabled = true;
+      addToCartButton.textContent = "Already added (Stock limit)";
+      addToCartButton.classList.add("opacity-50", "cursor-not-allowed");
+      return;
+    }
+
+    // 2. Jika variant memang out of stock
+    if (availableStock <= 0) {
+      addToCartButton.disabled = true;
+      addToCartButton.textContent = "Out of Stock";
+      addToCartButton.classList.add("opacity-50", "cursor-not-allowed");
+      return;
+    }
+
+    // 3. Jika semua variant habis
+    if (areAllVariantsUnavailable()) {
+      addToCartButton.disabled = true;
+      addToCartButton.textContent = "Out of Stock";
+      addToCartButton.classList.add("opacity-50", "cursor-not-allowed");
+      return;
+    }
+
+    // 4. Masih bisa dibeli
+    addToCartButton.disabled = false;
+    addToCartButton.textContent = "Add to Cart";
+    addToCartButton.classList.remove("opacity-50", "cursor-not-allowed");
+  }
+
+  variantInput.addEventListener("change", updateCartValidation);
+  updateCartValidation();
+});
+</script>
+
+
+</body>
+</html>

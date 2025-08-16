@@ -1,0 +1,439 @@
+{% if template.name == 'index' %}
+<header class="custom-header" data-mobile-menu-state="closed" data-mobile-view="main">
+  <!-- HAMBURGER (≤1024px) -->
+  <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- LEFT MENU (desktop) -->
+  <nav class="header-nav header-left">
+    <div class="has-dropdown">
+      <a href="/collections/all" class="nav-link">Shop</a>
+      <!-- DROPDOWN DESKTOP -->
+      <div class="dropdown" role="menu" aria-label="Shop submenu">
+        <a href="/collections/new-collection" role="menuitem">NEW COLLECTION</a>
+        <a href="/collections/all" role="menuitem">VIEW ALL</a>
+        <a href="/collections/coats" role="menuitem">COATS</a>
+        <a href="/collections/jackets" role="menuitem">JACKETS</a>
+        <a href="/collections/knitwear" role="menuitem">KNITWEAR</a>
+        <a href="/collections/sweaters" role="menuitem">SWEATERS</a>
+        <a href="/collections/denim" role="menuitem">DENIM</a>
+        <a href="/collections/trousers" role="menuitem">TROUSERS</a>
+        <a href="/collections/shirts" role="menuitem">SHIRTS</a>
+        <a href="/collections/t-shirts" role="menuitem">T-SHIRTS</a>
+        <a href="/collections/accessories" role="menuitem">ACCESSORIES</a>
+        <a href="/collections/tank-tops" role="menuitem">TANK TOPS</a>
+      </div>
+    </div>
+    <div class="has-dropdown">
+  <a href="/pages/lookbook" class="nav-link">Lookbook</a>
+  <div class="dropdown" role="menu" aria-label="Lookbook submenu">
+    <a href="/pages/lookbook-ss25" role="menuitem">S/S25</a>
+    <a href="/pages/lookbook-fw24" role="menuitem">F/W24</a>
+    <a href="/pages/lookbook-ss24" role="menuitem">S/S24</a>
+  </div>
+</div>
+
+    <a href="/blogs/journal" class="nav-link">Journal</a>
+  </nav>
+
+  <!-- LOGO CENTER -->
+  <div class="header-logo">
+    <a href="/"><img src="https://cdn.shopify.com/s/files/1/0774/1807/0241/files/logofiles.avif?v=1755113941" alt="Logo" loading="eager"></a>
+  </div>
+
+  <!-- RIGHT MENU -->
+  <div class="header-right">
+    <a href="/cart" class="nav-link">Cart{% if cart.item_count > 0 %} ({{ cart.item_count }}){% endif %}</a>
+  </div>
+
+  <!-- ===== MOBILE MENU OVERLAY (2 LEVEL) ===== -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-viewport">
+      <!-- LEVEL 1: MAIN -->
+      <nav class="mobile-panel mobile-view-main" aria-label="Mobile main menu">
+        <div class="mobile-box">
+          <button class="mobile-link js-open-shop" type="button">SHOP</button>
+          <button class="mobile-link js-open-lookbook" type="button">LOOKBOOK</button>
+          <a class="mobile-link" href="/blogs/journal">JOURNAL</a>
+        </div>
+      </nav>
+
+      <!-- LEVEL 2: SHOP SUBMENU -->
+      <nav class="mobile-panel mobile-view-shop" aria-label="Mobile shop submenu">
+        <div class="mobile-box">
+          <button class="mobile-back js-back" type="button">&lt; BACK</button>
+          <a class="mobile-link" href="/collections/new-collection">NEW COLLECTION</a>
+          <a class="mobile-link" href="/collections/all">VIEW ALL</a>
+          <a class="mobile-link" href="/collections/coats">COATS</a>
+          <a class="mobile-link" href="/collections/jackets">JACKETS</a>
+          <a class="mobile-link" href="/collections/knitwear">KNITWEAR</a>
+          <a class="mobile-link" href="/collections/sweaters">SWEATERS</a>
+          <a class="mobile-link" href="/collections/denim">DENIM</a>
+          <a class="mobile-link" href="/collections/trousers">TROUSERS</a>
+          <a class="mobile-link" href="/collections/shirts">SHIRTS</a>
+          <a class="mobile-link" href="/collections/t-shirts">T-SHIRTS</a>
+          <a class="mobile-link" href="/collections/accessories">ACCESSORIES</a>
+          <a class="mobile-link" href="/collections/tank-tops">TANK TOPS</a>
+        </div>
+      </nav>
+
+      <!-- LEVEL 2: LOOKBOOK SUBMENU -->
+<nav class="mobile-panel mobile-view-lookbook" aria-label="Mobile lookbook submenu">
+  <div class="mobile-box">
+    <button class="mobile-back js-back" type="button">&lt; BACK</button>
+    <a class="mobile-link" href="/pages/lookbook-ss25">S/S25</a>
+    <a class="mobile-link" href="/pages/lookbook-fw24">F/W24</a>
+    <a class="mobile-link" href="/pages/lookbook-ss24">S/S24</a>
+  </div>
+</nav>
+
+    </div>
+  </div>
+</header>
+
+<style>
+  .custom-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 70px;
+    z-index: 9999;
+    background: transparent;
+  }
+
+  /* LEFT NAV (desktop) */
+  .header-left {
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 24px;
+    padding-left: 40px;
+    align-items: center;
+  }
+  .header-left > * {
+    display: flex;
+    align-items: center;
+  }
+
+  /* LOGO CENTER */
+  .header-logo {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .header-logo img {
+    height: 25px;
+    display: block;
+    filter: brightness(0) invert(1);
+  }
+
+  /* RIGHT NAV */
+  .header-right {
+    position: absolute;
+    right: 0; top: 50%;
+    transform: translateY(-50%);
+    padding-right: 40px;
+  }
+
+  /* LINKS */
+  .nav-link,
+  .header-nav a,
+  .header-right a,
+  .mobile-link {
+    font-family: sans-serif;
+    font-weight: 500;
+    text-decoration: none;
+    color: #fff;
+    font-size: 12px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    transition: opacity .3s ease;
+    display: block;
+    line-height: 1;
+    padding: 8px 0;
+  }
+  .header-nav a:hover,
+  .header-right a:hover {
+    opacity: .7;
+  }
+
+  /* DESKTOP DROPDOWN */
+  .has-dropdown {
+    position: relative;
+    line-height: 1;
+  }
+  .has-dropdown > .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    bottom: -10px;
+    height: 10px;
+    pointer-events: none;
+  }
+  .dropdown {
+    position: absolute;
+    top: calc(100% + 3px);
+    left: 0;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 18px;
+    background: rgba(0,0,0,.75);
+    backdrop-filter: blur(8px) saturate(140%);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+    z-index: 10000;
+  }
+  .has-dropdown:hover .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* HAMBURGER */
+  .hamburger {
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    margin-left: 20px;
+    width: 25px;
+    height: 25px;
+    display: none;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  .hamburger span {
+    display: block;
+    height: 2px;
+    margin: 6px 0;
+    background: #fff;
+    width: 100%;
+    transition: transform .25s ease, opacity .25s ease;
+  }
+  .custom-header[data-mobile-menu-state="open"] .hamburger span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .custom-header[data-mobile-menu-state="open"] .hamburger span:nth-child(2) {
+    opacity: 0;
+  }
+  .custom-header[data-mobile-menu-state="open"] .hamburger span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* MOBILE MENU OVERLAY */
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.65);
+    height: 100dvh;
+    opacity: 0;
+    visibility: hidden;
+    display: grid;
+    place-items: center;
+    backdrop-filter: saturate(120%) blur(2px);
+    padding: 24px;
+    transition: opacity .38s ease, visibility .38s ease, backdrop-filter .38s ease;
+    z-index: 10001;
+  }
+  .custom-header[data-mobile-menu-state="open"] .mobile-menu {
+    opacity: 1;
+    visibility: visible;
+    backdrop-filter: saturate(140%) blur(8px);
+  }
+
+  /* MOBILE VIEWPORT & PANEL */
+  .mobile-viewport {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .mobile-panel {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateX(14px) translateY(4px);
+    pointer-events: none;
+    transition: opacity .42s ease, transform .45s cubic-bezier(.2,.75,.3,1);
+    will-change: transform, opacity;
+  }
+  .mobile-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    pointer-events: auto;
+    max-width: 90vw;
+  }
+
+  /* ACTIVE STATES */
+  .custom-header[data-mobile-view="main"] .mobile-view-main,
+  .custom-header[data-mobile-view="shop"] .mobile-view-shop,
+  .custom-header[data-mobile-view="lookbook"] .mobile-view-lookbook {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+    pointer-events: auto;
+    z-index: 2;
+  }
+  .custom-header[data-mobile-view="main"] .mobile-view-shop,
+  .custom-header[data-mobile-view="main"] .mobile-view-lookbook,
+  .custom-header[data-mobile-view="shop"] .mobile-view-main,
+  .custom-header[data-mobile-view="lookbook"] .mobile-view-main {
+    opacity: 0;
+    transform: translateX(-16px) translateY(2px);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* STAGGER ITEM ANIMASI */
+  .mobile-box > * {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .42s ease, transform .45s cubic-bezier(.2,.75,.3,1);
+  }
+  .mobile-box > *:nth-child(1) { transition-delay: .02s; }
+  .mobile-box > *:nth-child(2) { transition-delay: .07s; }
+  .mobile-box > *:nth-child(3) { transition-delay: .12s; }
+  .mobile-box > *:nth-child(4) { transition-delay: .17s; }
+  .mobile-box > *:nth-child(5) { transition-delay: .22s; }
+  .mobile-box > *:nth-child(6) { transition-delay: .27s; }
+  .mobile-box > *:nth-child(7) { transition-delay: .32s; }
+  .mobile-box > *:nth-child(8) { transition-delay: .37s; }
+  .mobile-box > *:nth-child(9) { transition-delay: .42s; }
+  .mobile-box > *:nth-child(10) { transition-delay: .47s; }
+  .mobile-box > *:nth-child(11) { transition-delay: .52s; }
+  .mobile-box > *:nth-child(12) { transition-delay: .57s; }
+  .mobile-box > *:nth-child(13) { transition-delay: .62s; }
+  .mobile-box > *:nth-child(14) { transition-delay: .67s; }
+
+  .custom-header[data-mobile-view="main"] .mobile-view-main .mobile-box > *,
+  .custom-header[data-mobile-view="shop"] .mobile-view-shop .mobile-box > *,
+  .custom-header[data-mobile-view="lookbook"] .mobile-view-lookbook .mobile-box > * {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* MOBILE LINK + BACK */
+  .mobile-link {
+    font-size: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+  }
+  .mobile-link:hover {
+    opacity: .85;
+  }
+  .mobile-back {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font: 700 13px/1.2 sans-serif;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    align-self: center;
+  }
+
+  /* ACCESSIBILITY: prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu,
+    .mobile-panel,
+    .mobile-box > * {
+      transition: none !important;
+      transform: none !important;
+    }
+  }
+
+  /* RESPONSIVE BREAKPOINTS */
+  @media (max-width:1024px) {
+    .header-left { display: none; }
+    .hamburger { display: block; }
+    .header-logo img { height: 20px; }
+    .header-logo { padding-top: 10px;}
+    .header-right { padding-right: 20px; padding-top: 10px; }
+  }
+  @media (max-width:480px) {
+    .header-logo img { height: 20px; }
+  }
+</style>
+
+
+<script>
+  (function(){
+    var header = document.querySelector('.custom-header');
+    var btn = document.getElementById('hamburgerBtn');
+    var menu = document.getElementById('mobileMenu');
+    var openShop = document.querySelector('.js-open-shop');
+    var openLookbook = document.querySelector('.js-open-lookbook'); 
+    var backBtns = document.querySelectorAll('.js-back'); 
+
+    if(!header || !btn || !menu) return;
+
+    function lockScroll(lock){
+      document.documentElement.style.overflow = lock ? 'hidden' : '';
+    }
+
+    function openMenu(){
+      header.setAttribute('data-mobile-menu-state','open');
+      btn.setAttribute('aria-expanded','true');
+      lockScroll(true);
+      header.setAttribute('data-mobile-view','main'); 
+    }
+
+    function closeMenu(){
+      header.setAttribute('data-mobile-menu-state','closed');
+      btn.setAttribute('aria-expanded','false');
+      lockScroll(false);
+    }
+
+    btn.addEventListener('click', function(){
+      var isOpen = header.getAttribute('data-mobile-menu-state') === 'open';
+      isOpen ? closeMenu() : openMenu();
+    });
+
+    
+    menu.addEventListener('click', function(e){
+      if (!e.target.closest('.mobile-box')) closeMenu();
+    });
+
+    // Esc untuk menutup
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeMenu();
+    });
+
+    // Navigasi ke submenu SHOP
+    if(openShop){
+      openShop.addEventListener('click', function(){
+        header.setAttribute('data-mobile-view','shop');
+      });
+    }
+
+    // Navigasi ke submenu LOOKBOOK
+    if(openLookbook){
+      openLookbook.addEventListener('click', function(){
+        header.setAttribute('data-mobile-view','lookbook');
+      });
+    }
+
+    // Tombol BACK dari semua submenu ke main
+    backBtns.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        header.setAttribute('data-mobile-view','main');
+      });
+    });
+  })();
+</script>
+
+{% endif %}
