@@ -18,3 +18,11 @@ This project was developed to demonstrate my ability in:
 - **Shopify Liquid**  
 - **HTML5 / CSS3**  
 - **JavaScript (ES6)**
+
+
+
+### Desktop / Mobile Version
+![Desktop Preview](assets/ofiles.gif)
+
+### Mobile Version
+![Mobile Preview](assets/mobile-version.gif)
